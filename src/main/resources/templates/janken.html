@@ -9,10 +9,21 @@
 <body>
   <h1>Janken GAME!</h1>
 
-  <!-- nameがある場合のみ表示する -->
   <p th:if="${name}">Hi [[${name}]]</p>
 
-  <!-- ※Task2のリンクと結果表示は後ほどここに追加します -->
+  <!-- Task2: 対戦用のリンク -->
+  <p>
+    <a href="/janken?hand=グー">グー</a>
+    <a href="/janken?hand=チョキ">チョキ</a>
+    <a href="/janken?hand=パー">パー</a>
+  </p>
+
+  <!-- Task2: 対戦結果の表示 (jankenGameオブジェクトが存在するときだけ表示) -->
+  <div th:if="${jankenGame}">
+    <p>あなたの手 [[${jankenGame.myHand}]]</p>
+    <p>相手の手 [[${jankenGame.cpuHand}]]</p>
+    <p>結果 [[${jankenGame.result}]]</p>
+  </div>
 </body>
 
 </html>
