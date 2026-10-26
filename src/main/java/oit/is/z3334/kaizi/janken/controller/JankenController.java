@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam; // 追加
 
 import oit.is.z3334.kaizi.janken.model.User;
 import oit.is.z3334.kaizi.janken.model.UserMapper;
@@ -19,7 +20,7 @@ public class JankenController {
   private UserMapper userMapper;
 
   @Autowired
-  private MatchMapper matchMapper; // 追加
+  private MatchMapper matchMapper;
 
   @GetMapping("/janken")
   public String janken(Principal prin, ModelMap model) {
@@ -29,10 +30,22 @@ public class JankenController {
     ArrayList<User> users = userMapper.selectAllUsers();
     model.addAttribute("users", users);
 
-    // DBから試合結果一覧を取得してThymeleafへ渡す
     ArrayList<Match> matches = matchMapper.selectAllMatches();
-    model.addAttribute("matches", matches); // 追加
+    model.addAttribute("matches", matches);
 
     return "janken";
+  }
+
+  // 追加：/match?id=... のリクエストを受け取るメソッド
+  @GetMapping("/match")
+  public String match(@RequestParam("id") int id, Principal prin, ModelMap model) {
+    String loginUser = prin.getName();
+    model.addAttribute("loginUser", loginUser);
+
+    // クリックされた相手のユーザ情報を取得
+    User opponent = userMapper.selectUserById(id);
+    model.addAttribute("opponent", opponent);
+
+    return "match";
   }
 }

@@ -13,7 +13,9 @@
 
   <p>エントリー</p>
   <ul>
-    <li th:each="user : ${users}" th:text="${user.name}"></li>
+    <li th:each="user : ${users}">
+      <a th:href="@{/match(id=${user.id})}" th:text="${user.name}"></a>
+    </li>
   </ul>
 
   <p>試合結果</p>
