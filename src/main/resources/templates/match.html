@@ -11,6 +11,21 @@
 
   <p th:text="${loginUser} + ' V.S. ' + ${opponent.name}"></p>
 
+  <!-- まだ手を選んでいないとき（リンクを表示） -->
+  <div>
+    <a th:href="@{/fight(id=${opponent.id}, hand='Gu')}">ぐー</a>
+    <a th:href="@{/fight(id=${opponent.id}, hand='Choki')}">ちょき</a>
+    <a th:href="@{/fight(id=${opponent.id}, hand='Pa')}">ぱー</a>
+  </div>
+
+  <!-- 勝負が終わった後に結果を表示 -->
+  <div th:if="${myHand != null}">
+    <p th:text="'あなたの手: ' + ${myHand}"></p>
+    <p th:text="'相手の手: ' + ${cpuHand}"></p>
+    <p th:text="'結果: ' + ${result}"></p>
+  </div>
+
+  <br>
   <a href="/janken">もどる</a>
 </body>
 
