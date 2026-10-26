@@ -16,9 +16,12 @@ public class JankenAuthConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.formLogin(login -> login.permitAll())
             .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/h2-console/**").permitAll()
                 .requestMatchers("/janken/**").authenticated()
                 .anyRequest().permitAll())
-            .logout(logout -> logout.logoutSuccessUrl("/"));
+            .logout(logout -> logout.logoutSuccessUrl("/"))
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
+            .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
         return http.build();
     }
 
@@ -33,7 +36,6 @@ public class JankenAuthConfiguration {
         UserDetails user2 = User.withUsername("user2")
                 .password(hashedPwd)
                 .roles("USER").build();
-
         UserDetails honda = User.withUsername("ほんだ")
             .password(hashedPwd)
             .roles("USER").build();
