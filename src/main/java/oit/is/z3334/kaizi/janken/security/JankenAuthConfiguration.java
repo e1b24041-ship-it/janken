@@ -34,6 +34,9 @@ public class JankenAuthConfiguration {
                 .password(hashedPwd)
                 .roles("USER").build();
 
-        return new InMemoryUserDetailsManager(user1, user2);
+        UserDetails honda = User.withUsername("ほんだ")
+            .password(hashedPwd)
+            .roles("USER").build();
+        return new InMemoryUserDetailsManager(user1, user2, honda);
     }
 }
