@@ -13,11 +13,11 @@
 
   <p>エントリー</p>
   <ul>
-    <li th:each="user : ${entry.users}" th:text="${user}"></li>
+    <li th:each="user : ${users}" th:text="${user.name}"></li>
   </ul>
 
   <!-- 余力課題：エントリー人数の表示 -->
-  <p th:text="'今' + ${#lists.size(entry.users)} + '人がエントリーしています'"></p>
+  <p th:text="'今' + ${#lists.size(users)} + '人がエントリーしています'"></p>
 
   <p th:text="'Hi ' + ${loginUser}"></p>
   <a href="/janken?hand=Gu">ぐー</a>
