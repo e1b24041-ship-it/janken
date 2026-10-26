@@ -16,6 +16,13 @@
     <li th:each="user : ${users}" th:text="${user.name}"></li>
   </ul>
 
+  <p>試合結果</p>
+  <ul>
+    <li th:each="match : ${matches}"
+      th:text="'id:' + ${match.id} + ' user1:' + ${match.user1} + ' user2:' + ${match.user2} + ' user1の手:' + ${match.user1Hand} + ' user2の手:' + ${match.user2Hand}">
+    </li>
+  </ul>
+
   <!-- 余力課題：エントリー人数の表示 -->
   <p th:text="'今' + ${#lists.size(users)} + '人がエントリーしています'"></p>
 
