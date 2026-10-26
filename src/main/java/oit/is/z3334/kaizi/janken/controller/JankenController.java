@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import oit.is.z3334.kaizi.janken.model.User;
 import oit.is.z3334.kaizi.janken.model.UserMapper;
+import oit.is.z3334.kaizi.janken.model.Match;
+import oit.is.z3334.kaizi.janken.model.MatchMapper;
 
 @Controller
 public class JankenController {
@@ -16,14 +18,20 @@ public class JankenController {
   @Autowired
   private UserMapper userMapper;
 
+  @Autowired
+  private MatchMapper matchMapper; // 追加
+
   @GetMapping("/janken")
   public String janken(Principal prin, ModelMap model) {
     String loginUser = prin.getName();
     model.addAttribute("loginUser", loginUser);
 
-    // DBからユーザ一覧を取得してThymeleafへ渡す
     ArrayList<User> users = userMapper.selectAllUsers();
     model.addAttribute("users", users);
+
+    // DBから試合結果一覧を取得してThymeleafへ渡す
+    ArrayList<Match> matches = matchMapper.selectAllMatches();
+    model.addAttribute("matches", matches); // 追加
 
     return "janken";
   }
