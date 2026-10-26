@@ -2,28 +2,27 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <title>Janken GAME!</title>
 </head>
 
 <body>
+  <a href="/logout">ログアウト</a>
+
   <h1>Janken GAME!</h1>
 
-  <p th:if="${name}">Hi [[${name}]]</p>
+  <p>エントリー</p>
+  <ul>
+    <li th:each="user : ${entry.users}" th:text="${user}"></li>
+  </ul>
 
-  <!-- Task2: 対戦用のリンク -->
-  <p>
-    <a href="/janken?hand=グー">グー</a>
-    <a href="/janken?hand=チョキ">チョキ</a>
-    <a href="/janken?hand=パー">パー</a>
-  </p>
+  <!-- 余力課題：エントリー人数の表示 -->
+  <p th:text="'今' + ${#lists.size(entry.users)} + '人がエントリーしています'"></p>
 
-  <!-- Task2: 対戦結果の表示 (jankenGameオブジェクトが存在するときだけ表示) -->
-  <div th:if="${jankenGame}">
-    <p>あなたの手 [[${jankenGame.myHand}]]</p>
-    <p>相手の手 [[${jankenGame.cpuHand}]]</p>
-    <p>結果 [[${jankenGame.result}]]</p>
-  </div>
+  <p th:text="'Hi ' + ${loginUser}"></p>
+  <a href="/janken?hand=Gu">ぐー</a>
+  <a href="/janken?hand=Choki">ちょき</a>
+  <a href="/janken?hand=Pa">ぱー</a>
 </body>
 
 </html>
