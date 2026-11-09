@@ -18,6 +18,13 @@
     </li>
   </ul>
 
+  <p>アクティブな試合</p>
+  <ul>
+    <li th:each="info : ${activeMatches}"
+      th:text="'id:' + ${info.id} + ' user1:' + ${info.user1} + ' user2:' + ${info.user2} + ' isActive:' + ${info.isActive}">
+    </li>
+  </ul>
+
   <p>試合結果</p>
   <ul>
     <li th:each="match : ${matches}"
