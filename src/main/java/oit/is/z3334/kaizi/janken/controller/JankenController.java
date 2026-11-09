@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import oit.is.z3334.kaizi.janken.model.User;
 import oit.is.z3334.kaizi.janken.model.UserMapper;
 import oit.is.z3334.kaizi.janken.model.Match;
+import oit.is.z3334.kaizi.janken.model.MatchInfo;
+import oit.is.z3334.kaizi.janken.model.MatchInfoMapper;
 import oit.is.z3334.kaizi.janken.model.MatchMapper;
 
 @Controller
@@ -22,6 +24,9 @@ public class JankenController {
   @Autowired
   private MatchMapper matchMapper;
 
+  @Autowired
+private MatchInfoMapper matchInfoMapper;
+
   @GetMapping("/janken")
   public String janken(Principal prin, ModelMap model) {
     String loginUser = prin.getName();
@@ -32,6 +37,9 @@ public class JankenController {
 
     ArrayList<Match> matches = matchMapper.selectAllMatches();
     model.addAttribute("matches", matches);
+
+    ArrayList<MatchInfo> activeMatches = matchInfoMapper.selectActiveMatches();
+    model.addAttribute("activeMatches", activeMatches);
 
     return "janken";
   }
@@ -86,5 +94,25 @@ public class JankenController {
     model.addAttribute("result", result);
 
     return "match";
+  }
+
+  @GetMapping("/wait")
+  public String wait(@RequestParam("id") int opponentId, @RequestParam("hand") String myHand, Principal prin,
+      ModelMap model) {
+    String loginUser = prin.getName();
+    model.addAttribute("loginUser", loginUser);
+
+    // 自分のIDを取得
+    User myUser = userMapper.selectUserByName(loginUser);
+
+    // matchinfoに登録するデータをセットしてINSERT
+    MatchInfo matchInfo = new MatchInfo();
+    matchInfo.setUser1(myUser.getId());
+    matchInfo.setUser2(opponentId);
+    matchInfo.setUser1Hand(myHand);
+    matchInfo.setActive(true); // アクティブ状態をtrueにする
+    matchInfoMapper.insertMatchInfo(matchInfo);
+
+    return "wait";
   }
 }

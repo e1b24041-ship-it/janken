@@ -13,9 +13,9 @@
 
   <!-- まだ手を選んでいないとき（リンクを表示） -->
   <div>
-    <a th:href="@{/fight(id=${opponent.id}, hand='Gu')}">ぐー</a>
-    <a th:href="@{/fight(id=${opponent.id}, hand='Choki')}">ちょき</a>
-    <a th:href="@{/fight(id=${opponent.id}, hand='Pa')}">ぱー</a>
+    <a th:href="@{/wait(id=${opponent.id}, hand='Gu')}">ぐー</a>
+    <a th:href="@{/wait(id=${opponent.id}, hand='Choki')}">ちょき</a>
+    <a th:href="@{/wait(id=${opponent.id}, hand='Pa')}">ぱー</a>
   </div>
 
   <!-- 勝負が終わった後に結果を表示 -->
