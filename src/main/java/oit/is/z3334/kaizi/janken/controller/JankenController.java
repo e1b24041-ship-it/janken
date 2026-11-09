@@ -102,16 +102,35 @@ private MatchInfoMapper matchInfoMapper;
     String loginUser = prin.getName();
     model.addAttribute("loginUser", loginUser);
 
-    // 自分のIDを取得
     User myUser = userMapper.selectUserByName(loginUser);
 
-    // matchinfoに登録するデータをセットしてINSERT
-    MatchInfo matchInfo = new MatchInfo();
-    matchInfo.setUser1(myUser.getId());
-    matchInfo.setUser2(opponentId);
-    matchInfo.setUser1Hand(myHand);
-    matchInfo.setActive(true); // アクティブ状態をtrueにする
-    matchInfoMapper.insertMatchInfo(matchInfo);
+    // 1. matchinfoテーブルの確認
+    // 自分（myUser.getId()）をuser2として指定し、相手（opponentId）が待機しているアクティブなレコードを探す
+    MatchInfo activeMatch = matchInfoMapper.selectActiveMatchInfo(opponentId, myUser.getId());
+
+    if (activeMatch != null) {
+      // 2. 存在する場合（相手が待機中 -> 試合成立）
+      // matchesテーブルに対戦結果を保存（isActiveはTRUE）
+      Match match = new Match();
+      match.setUser1(activeMatch.getUser1());
+      match.setUser2(myUser.getId());
+      match.setUser1Hand(activeMatch.getUser1Hand());
+      match.setUser2Hand(myHand);
+      match.setActive(true);
+      matchMapper.insertMatch(match); // Task1で作成したinsertメソッドを利用
+
+      // matchinfoテーブルの該当レコードの待機状態を解除（FALSEに更新）
+      matchInfoMapper.updateMatchInfoActive(activeMatch.getId(), false);
+
+    } else {
+      // 存在しない場合（自分が先手 -> 待機状態を登録）
+      MatchInfo matchInfo = new MatchInfo();
+      matchInfo.setUser1(myUser.getId());
+      matchInfo.setUser2(opponentId);
+      matchInfo.setUser1Hand(myHand);
+      matchInfo.setActive(true);
+      matchInfoMapper.insertMatchInfo(matchInfo);
+    }
 
     return "wait";
   }
