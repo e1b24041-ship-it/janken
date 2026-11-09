@@ -14,6 +14,8 @@ import oit.is.z3334.kaizi.janken.model.Match;
 import oit.is.z3334.kaizi.janken.model.MatchInfo;
 import oit.is.z3334.kaizi.janken.model.MatchInfoMapper;
 import oit.is.z3334.kaizi.janken.model.MatchMapper;
+import oit.is.z3334.kaizi.janken.service.AsyncKekka;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Controller
 public class JankenController {
@@ -25,7 +27,17 @@ public class JankenController {
   private MatchMapper matchMapper;
 
   @Autowired
-private MatchInfoMapper matchInfoMapper;
+  private MatchInfoMapper matchInfoMapper;
+
+  @Autowired
+  private AsyncKekka asyncKekka;
+
+  @GetMapping("/wait/result")
+  public SseEmitter waitResult() {
+    SseEmitter emitter = new SseEmitter();
+    asyncKekka.asyncShowMatchResult(emitter);
+    return emitter;
+  }
 
   @GetMapping("/janken")
   public String janken(Principal prin, ModelMap model) {

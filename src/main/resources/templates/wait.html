@@ -11,7 +11,21 @@
   <h1>Janken GAME!</h1>
   <p th:text="'Hi ' + ${loginUser}"></p>
   <p>相手の手を待ってます</p>
-  <a href="/janken">もどる</a>
+
+  <!-- 非同期で書き換わる部分 -->
+  <div id="result"></div>
+
+  <!-- EventSourceを利用した非同期処理 -->
+  <script>
+    window.onload = function () {
+      var sse = new EventSource('/wait/result');
+      sse.addEventListener("matchResult", function (event) {
+        var resultDiv = document.getElementById("result");
+        // 受け取ったデータと[戻る]リンクを表示する
+        resultDiv.innerHTML = "<p>結果</p><p>" + event.data + "</p><a href='/janken'>もどる</a>";
+      });
+    }
+  </script>
 </body>
 
 </html>
